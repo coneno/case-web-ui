@@ -130,7 +130,7 @@ export const Example = () =>
               {
                 key: 't', role: 'title',
                 content: [{ code: 'en', resolvedText: "Question title's content attribute" }],
-                description: [{ code: 'en', resolvedText: "Question title's description attribute" }]
+                description: [{ code: 'en', resolvedText: "Question title's description attribute as fallback" }]
               },
               {
                 key: 'rg', role: 'responseGroup', items: [
@@ -215,6 +215,10 @@ export const Example = () =>
                 key: 't', role: 'title',
                 content: [{ code: 'en', resolvedText: "With help group -> " }],
                 description: [{ code: 'en', resolvedText: "Question title's description attribute" }]
+              },
+              {
+                key: 'st', role: 'subtitle',
+                content: [{ code: 'en', resolvedText: "Question subtitle's content" }],
               },
               {
                 key: 'h', role: 'helpGroup',

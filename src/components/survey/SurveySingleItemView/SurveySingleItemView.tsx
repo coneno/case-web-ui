@@ -66,6 +66,8 @@ const SurveySingleItemView: React.FC<SurveySingleItemViewProps> = (props) => {
           switch (component.role) {
             case 'title':
               return null;
+            case 'subtile':
+              return null;
             case 'helpGroup':
               return null;
             case 'footnote':
@@ -122,6 +124,15 @@ const SurveySingleItemView: React.FC<SurveySingleItemViewProps> = (props) => {
 
   // const titleComp = props.renderItem.components ? getItemComponentTranslationByRole(props.renderItem.components.items, 'title', props.languageCode) : undefined;
   const titleComp = getItemComponentByRole(props.renderItem.components?.items, 'title')
+  let subTitleComp = getItemComponentByRole(props.renderItem.components?.items, 'subtitle')
+  // fallback to legacy survey subtitle
+  if (!subTitleComp && titleComp && titleComp.description) {
+    subTitleComp = {
+      key: 'legacy-subtitle',
+      role: 'text',
+      content: titleComp.description,
+    }
+  }
 
   const renderTitleComp = (): React.ReactNode => {
     if (!titleComp) {
@@ -136,8 +147,7 @@ const SurveySingleItemView: React.FC<SurveySingleItemViewProps> = (props) => {
     }
 
     let content = renderFormattedContent(titleComp, props.languageCode, undefined, props.dateLocales ? props.dateLocales : []);
-
-    const description = getLocaleStringTextByCode(titleComp.description, props.languageCode);
+    const subTitleContent = subTitleComp ? renderFormattedContent(subTitleComp, props.languageCode, 'fst-italic', props.dateLocales ? props.dateLocales : []) : null;
 
     return (
       <div
@@ -172,7 +182,8 @@ const SurveySingleItemView: React.FC<SurveySingleItemViewProps> = (props) => {
                 {'*'}
               </span> : null}
           </h5>
-          {description ? <p className="m-0 fst-italic">{description} </p> : null}
+
+          {subTitleContent && <div>{subTitleContent}</div>}
         </div>
 
         {renderHelpGroup()}
