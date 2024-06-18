@@ -147,7 +147,7 @@ const SurveySingleItemView: React.FC<SurveySingleItemViewProps> = (props) => {
     }
 
     let content = renderFormattedContent(titleComp, props.languageCode, undefined, props.dateLocales ? props.dateLocales : []);
-    const subTitleContent = subTitleComp ? renderFormattedContent(subTitleComp, props.languageCode, 'italic', props.dateLocales ? props.dateLocales : []) : null;
+    const subTitleContent = subTitleComp ? renderFormattedContent(subTitleComp, props.languageCode, 'fst-italic', props.dateLocales ? props.dateLocales : []) : null;
 
     return (
       <div
