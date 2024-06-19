@@ -180,6 +180,9 @@ const Matrix: React.FC<MatrixProps> = (props) => {
     return true;
   }
 
+  const matrixDef = (props.compDef as ItemGroupComponent);
+  const headerRow = getItemComponentByRole(matrixDef.items, 'headerRow');
+
   const renderRadioRow = (compDef: ItemGroupComponent, index: number): React.ReactNode => {
     const rowKey = [props.parentKey, compDef.key].join('.');
 
@@ -235,9 +238,14 @@ const Matrix: React.FC<MatrixProps> = (props) => {
   }
 
   const renderResponseRow = (compDef: ItemGroupComponent, index: number): React.ReactNode => {
+    const rowLabel = getLocaleStringTextByCode(compDef.content, props.languageCode) || '';
     const rowKey = [props.parentKey, compDef.key].join('.');
+
     const cells = (compDef as ItemGroupComponent).items.map((cell, cIndex) => {
       const cellKey = [rowKey, cell.key].join('.');
+      const headerLabel = (headerRow) && getLocaleStringTextByCode((headerRow as ItemGroupComponent).items[cIndex]?.content, props.languageCode) || '';
+
+
       let currentCellContent: React.ReactNode | null;
       const isLast = index === matrixDef.items.length - 1;
       switch (cell.role) {
@@ -307,22 +315,44 @@ const Matrix: React.FC<MatrixProps> = (props) => {
           console.warn('cell role for matrix question unknown: ', cell.role);
           break;
       }
-      return <td
-        key={cell.key ? cell.key : cIndex.toString()}
-        className={clsx(
-          "px-2 py-1",
-          {
-            "border-bottom border-grey-2": !isLast
+      return <div key={cellKey}
+        role="cell" className="px-2 py-1" style={{
+          flex: "1 1 0%",
+          minWidth: 0
+        }}>
+        <div className='d-block d-md-none fw-bold mb-1' role="columnheader">
+          {headerLabel}
+        </div>
+        <div>
+          {currentCellContent}
+        </div>
+      </div>
+    });
 
-          })}
-      >{currentCellContent}</td>
-    }
+    return <div
+      key={rowKey}
+      role="row"
+      className="d-flex flex-column flex-md-row border-bottom w-100">
+      <div role='rowheader'
+        className="fw-bold px-2 pt-2 d-flex d-md-none" style={{
+          flex: "1 1 0%",
+          minWidth: 0
+        }}>
+        {rowLabel}
+      </div>
 
-    );
-    return <tr key={compDef.key}
-    >
-      {cells}
-    </tr>
+      <div className='d-flex flex-column flex-sm-row grow px-2 align-items-md-center w-100'>
+        {rowLabel && <div role="rowheader" className="d-none d-md-flex fw-bold min-w-0 px-2 py-1"
+          style={{
+            flex: "1 1 0%",
+            minWidth: 0
+          }}
+        >
+          {rowLabel}
+        </div>}
+        {cells}
+      </div>
+    </div>
   }
 
   const renderTableRow = (compDef: ItemGroupComponent, index: number): React.ReactNode => {
@@ -343,10 +373,12 @@ const Matrix: React.FC<MatrixProps> = (props) => {
     }
   }
 
+
   const renderHeaderRow = (header: ItemGroupComponent | undefined): React.ReactNode => {
     if (!header) {
       return null;
     }
+
     const cells = header.items.map((cell, index) => {
       let currentCellContent: React.ReactNode | null;
       switch (cell.role) {
@@ -357,43 +389,41 @@ const Matrix: React.FC<MatrixProps> = (props) => {
           console.warn('cell role for matrix header unknown: ', cell.role);
           break;
       }
-      return <th
+      return <div
         key={cell.key ? cell.key : index.toString()}
-        className={"px-2 py-1"}
-      >
-        {currentCellContent}
-      </th>
-    })
-    return <tr
-      key={header.key ? header.key : "header"}
-      className="border-bottom border-grey-2"
-    >
-      {cells}
-    </tr>
-  }
-
-  const matrixDef = (props.compDef as ItemGroupComponent);
-  const headerRow = getItemComponentByRole(matrixDef.items, 'headerRow');
-
-  return (
-    <div className="d-flex justify-content-center text-center"
-      style={{
-        overflowX: 'auto',
-      }}
-    >
-      <table className="w-100 my-0 mx-auto"
+        role="columnheader" className="fw-bold text-truncate px-2 py-1 text-center justify-content-center"
         style={{
-          borderCollapse: 'collapse',
-          overflow: 'hidden',
+          flex: "1 1 0%",
+          minWidth: 0
         }}
       >
-        <thead>
-          {renderHeaderRow(headerRow as ItemGroupComponent)}
-        </thead>
-        <tbody>
-          {matrixDef.items.map((row, index) => renderTableRow(row as ItemGroupComponent, index))}
-        </tbody>
-      </table>
+        {currentCellContent}
+      </div>
+    });
+
+    return <div role="rowgroup" className="d-none d-md-flex border-bottom w-100">
+      <div role="row" className='d-flex w-100'>
+        <div role="columnheader" className="fw-bold px-2 py-1"
+          style={{
+            flex: "1 1 0%",
+            minWidth: 0
+          }}
+        ></div>
+        {cells}
+      </div>
+
+    </div>
+  }
+
+  return (
+    <div
+      className="d-flex flex-column"
+      role="table"
+    >
+      {/* Table Header for large screens */}
+      {renderHeaderRow(headerRow as ItemGroupComponent)}
+      {/* Rows */}
+      {matrixDef.items.map((row, index) => renderTableRow(row as ItemGroupComponent, index))}
     </div>
   );
 };
