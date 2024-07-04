@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.0 - 2024-07-04
+
+### Changed
+
+- Survey items can use separate subtitle component
+- Matrix question improvements for accessibility and styling
+- Can hide signup button on `LoginCard` component
+
 ## 1.14.7 - 2023-06-26
 
 ### Changed
