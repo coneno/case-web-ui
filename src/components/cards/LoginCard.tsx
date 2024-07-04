@@ -13,7 +13,8 @@ interface LoginCardProps {
   rememberMeLabel: string;
   loginBtn: string;
   passwordForgottenBtn: string;
-  signupBtn: string;
+  signupBtn?: string;
+  signupDisabled?: boolean;
   infoText?: string;
   fixEmailValue?: string
   persistState: boolean;
@@ -137,16 +138,17 @@ const LoginCard: React.FC<LoginCardProps> = (props) => {
               }}
             >{props.passwordForgottenBtn}</button>
           </div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-link p-0 text-decoration-none text-start text-uppercase"
-              onClick={(event) => {
-                event.preventDefault();
-                props.onOpenDialog('signup');
-              }}
-            >{props.signupBtn}</button>
-          </div>
+          {!props.signupDisabled &&
+            <div>
+              <button
+                type="button"
+                className="btn btn-link p-0 text-decoration-none text-start text-uppercase"
+                onClick={(event) => {
+                  event.preventDefault();
+                  props.onOpenDialog('signup');
+                }}
+              >{props.signupBtn}</button>
+            </div>}
         </form>
 
       </div>

@@ -70,6 +70,7 @@ FixedEmail.args = {
   loginBtn: 'Login',
   passwordForgottenBtn: 'Password forgotten?',
   signupBtn: 'I already have an account',
+  signupDisabled: true,
   infoText: undefined,
   fixEmailValue: 'test@test.com',
   persistState: true,
