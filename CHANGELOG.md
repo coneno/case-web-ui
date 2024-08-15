@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.15.1 - 2024-08-15
+
+### Changed
+
+- Use disabled attribute on DropDownGroup
+- Update survey-engine version
+
 ## 1.15.0 - 2024-07-04
 
 ### Changed

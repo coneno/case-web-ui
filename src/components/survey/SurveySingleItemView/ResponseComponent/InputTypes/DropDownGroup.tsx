@@ -59,6 +59,7 @@ const DropDownGroup: React.FC<DropDownGroupProps> = (props) => {
     aria-label="Select"
     value={getSelectedKey()}
     onChange={handleSelectionChange}
+    disabled={props.compDef.disabled === true || props.disabled === true}
   >
     <option aria-label="None" value="">{getLocaleStringTextByCode(props.compDef.description, props.languageCode)}</option>
     {
